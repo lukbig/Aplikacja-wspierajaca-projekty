@@ -6,8 +6,13 @@
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
-        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    
+    <servlet-mapping>
+        <servlet-name>DefaultServlet</servlet-name>
+        <!--It's needed if I use angular as a front end-->
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>DefaultServlet</servlet-name>
@@ -19,9 +24,13 @@
         </init-param>
     </servlet>
 
-    <servlet-mapping>
-        <servlet-name>DefaultServlet</servlet-name>
-        <!--It's needed if I use angular as a front end-->
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>WEB-INF/spring/appcontext/ApplicationContext.xml</param-value>
+    </context-param>
+    
 </web-app>
