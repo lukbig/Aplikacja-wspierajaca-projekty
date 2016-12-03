@@ -3,12 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       http://www.springframework.org/schema/data/jpa ">
 
     <context:component-scan base-package="com.bigos"/>
     <context:property-placeholder location = "classpath:/settings.properties"/>
@@ -39,5 +41,13 @@
         <property name="entityManagerFactory" ref="emf" />
     </bean>
 
+    <!-- It scans all beans in the application context and creates AOP interceptor for those which are annotated.
+    This is done via the SpringTransactionAnnotationParser, which is used by TransactionInterceptor
+     - the a for mentioned interceptor. Then whenever these beans are accessed, this advice is triggered and
+     a transaction is started before the target method is executed, and committed after the execution.-->
     <tx:annotation-driven />
+
+    <jpa:repositories base-package="com.bigos.awp.domain"
+                      entity-manager-factory-ref="emf"
+                      transaction-manager-ref="tm" />
 </beans>
