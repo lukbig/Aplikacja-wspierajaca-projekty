@@ -1,6 +1,7 @@
 package com.bigos.awp.domain;
 
 import com.bigos.awp.utilities.BCryptPasswordDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.validator.constraints.Email;
 
@@ -21,6 +22,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
+    @NotNull
+    private String nickName;
+
     @Size(min = 4, max = 30)
     private String firstName;
 
@@ -31,7 +35,7 @@ public class User {
     // 60 thanks to BCrypt
     @Size(min = 60, max = 60)
     @Column(name="password", nullable = false, length = 60)
-    @JsonDeserialize(using = BCryptPasswordDeserializer.class )
+    @JsonDeserialize(using = BCryptPasswordDeserializer.class)
     private String password;
 
     @NotNull
@@ -39,17 +43,24 @@ public class User {
     private String email;
 
     @NotNull
+    private Position position;
+
+    @NotNull
     private UserPermissions permissions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "editor")
     private List<Task> userAsEditorTasks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "personResponsibleForTask")
     private List<Task> userAsPRFTTasks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "programmer")
     private List<Task> userAsProgrammerTasks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tester")
     private List<Task> userAsTesterTasks;
 
@@ -141,5 +152,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

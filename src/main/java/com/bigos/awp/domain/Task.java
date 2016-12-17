@@ -1,5 +1,7 @@
 package com.bigos.awp.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -20,19 +22,21 @@ public class Task {
     private TaskStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "editorId")
     private User editor;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "prftId")
     private User personResponsibleForTask;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "programmerId")
+    @JsonInclude(content= JsonInclude.Include.NON_NULL)
     private User programmer;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "testerId")
+    @JsonInclude(content= JsonInclude.Include.NON_NULL)
     private User tester;
 
     @Column(columnDefinition="TEXT")
@@ -46,6 +50,7 @@ public class Task {
     private Date createDate;
 
     @OneToMany(mappedBy = "creator")
+    @JsonInclude(content= JsonInclude.Include.NON_NULL)
     private List<Comment> comments;
 
     @Override

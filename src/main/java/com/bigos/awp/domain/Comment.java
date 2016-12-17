@@ -1,5 +1,7 @@
 package com.bigos.awp.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -21,9 +23,13 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "userId")
     private User creator;
+
+    @Column(columnDefinition="TEXT")
+    @NotNull
+    private String commentBody;
 
     @Override
     public String toString() {
@@ -65,5 +71,13 @@ public class Comment {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public String getCommentBody() {
+        return commentBody;
+    }
+
+    public void setCommentBody(String commentBody) {
+        this.commentBody = commentBody;
     }
 }
