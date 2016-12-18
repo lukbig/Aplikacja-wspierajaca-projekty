@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:global-method-security pre-post-annotations="enabled" />
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <!--encoding retrieved password from db-->
+            <security:password-encoder ref="encoder"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSource"
+                    users-by-username-query = "select nickName,password,1 from User where nickName=?"
+                    authorities-by-username-query = "select nickName,permissions from User where nickName =?  "
+            />
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <security:http auto-config="true" use-expressions="true">
+        <!--If we use hasAnyAuthority, we can remove ROLE_ prefix-->
+        <!--<security:intercept-url pattern="/rest/**" access="hasAnyAuthority('MANAGER','ADMIN', 'USER')"/>-->
+        <security:intercept-url pattern="/admin/**" access="hasAnyAuthority('ADMIN')"/>
+        <security:intercept-url pattern="/manager/**" access="hasAnyAuthority('MANAGER')"/>
+        <security:intercept-url pattern="/user/**" access="hasAnyAuthority('USER')"/>
+        <security:logout logout-url="/logout"
+                invalidate-session="true"
+                logout-success-url="/index?logout"
+        />
+        <!-- enable csrf protection -->
+        <security:csrf disabled="true"/>
+    </security:http>
+
+</beans>

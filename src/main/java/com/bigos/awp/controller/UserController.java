@@ -79,7 +79,6 @@ public class UserController {
 
     @RequestMapping( value = "/add", method = RequestMethod.PUT)
     public @ResponseBody User addUser(@RequestBody @Valid User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
         User savedUser = userService.save(user);
         if (savedUser == null) {
             throw new NotUniqueNickname(user.getNickName());

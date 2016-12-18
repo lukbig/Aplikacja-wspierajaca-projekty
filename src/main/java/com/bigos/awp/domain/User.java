@@ -25,7 +25,7 @@ public class User {
     @NotNull
     private String nickName;
 
-    @Size(min = 4, max = 30)
+    @Size(min = 2, max = 30)
     private String firstName;
 
     @Size(min = 2, max = 50)
@@ -46,7 +46,7 @@ public class User {
     private Position position;
 
     @NotNull
-    private UserPermissions permissions;
+    private String permissions;
 
     @JsonIgnore
     @OneToMany(mappedBy = "editor")
@@ -106,11 +106,11 @@ public class User {
         this.userAsTesterTasks = userAsTesterTasks;
     }
 
-    public UserPermissions getPermissions() {
+    public String getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(UserPermissions permissions) {
+    public void setPermissions(String permissions) {
         this.permissions = permissions;
     }
 
