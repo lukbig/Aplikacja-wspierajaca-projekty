@@ -1,6 +1,7 @@
 package com.bigos.awp.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -49,8 +50,9 @@ public class Task {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "task")
     @JsonInclude(content= JsonInclude.Include.NON_NULL)
+    @JsonManagedReference
     private List<Comment> comments;
 
     @Override

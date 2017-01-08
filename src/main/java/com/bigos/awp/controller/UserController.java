@@ -1,13 +1,13 @@
 package com.bigos.awp.controller;
 
+import com.bigos.awp.domain.Position;
 import com.bigos.awp.domain.User;
 import com.bigos.awp.exception.EntityNotFoundException;
-import com.bigos.awp.exception.NotUniqueNickname;
 import com.bigos.awp.service.UserService;
 import com.bigos.awp.utilities.SortUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,16 +23,15 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private BCryptPasswordEncoder encoder;
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder encoder) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.encoder = encoder;
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody User read(@RequestParam(value = "userId") long userId) {
         User user = userService.findOne(userId);
@@ -42,8 +41,24 @@ public class UserController {
         return user;
     }
 
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public @ResponseBody User readUserByNickName(@RequestParam(value = "nickName") String nickName) {
+        return userService.getUserByNickName(nickName);
+    }
+
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(value = "/custom", method = RequestMethod.GET)
+    public @ResponseBody List<User> advancedSearch(@RequestParam(value = "nickName", required = false) String nickName,
+        @RequestParam(value = "firstName", required = false) String firstName, @RequestParam(value = "secondName", required = false) String secondName,
+        @RequestParam(value = "email", required = false) String email, @RequestParam(value = "permissions", required = false) String permissions,
+        @RequestParam(value = "position", required = false) Position position) {
+        return userService.findUsersWithCustomAttribute(nickName, firstName, secondName, email, position, permissions);
+    }
+
     @RequestMapping(params = { "page", "size" }, method = RequestMethod.GET)
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:9292")
     public List<User> findPaginated(@RequestParam("page") final int page, @RequestParam("size") final int size) {
         final Page<User> resultPage = userService.findAll(page, size);
         if (page > resultPage.getTotalPages()) {
@@ -52,8 +67,9 @@ public class UserController {
         return resultPage.getContent();
     }
 
-    @RequestMapping(value = "/all/{attribute}")
+    @RequestMapping(value = "/{attribute}")
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:9292")
     public List<User> getAll(@PathVariable("attribute") String attribute, @RequestParam("direction") String direction) {
         List<User> all = userService.findAll(SortUtility.orderBy(direction, attribute));
         if (!(all.size() > 0)) {
@@ -64,25 +80,27 @@ public class UserController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< deletes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value = "userId") long userId) {
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:9292")
+    public void delete(@PathVariable(value = "userId")  long userId) {
         userService.delete(userId);
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void delete(@RequestBody User user) {
-        userService.delete(user);
     }
 
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< updates >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @RequestMapping( value = "/add", method = RequestMethod.PUT)
-    public @ResponseBody User addUser(@RequestBody @Valid User user) {
-        User savedUser = userService.save(user);
-        if (savedUser == null) {
-            throw new NotUniqueNickname(user.getNickName());
-        }
-        return savedUser;
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin(origins = "http://localhost:9292")
+    public void addUser(@RequestBody @Valid User user) {
+        userService.save(user);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:9292")
+    public void updateUser(@RequestBody User user) {
+        userService.update(user);
     }
 }

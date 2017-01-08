@@ -1,6 +1,6 @@
 package com.bigos.awp.controller;
 
-import com.bigos.awp.domain.Task;
+import com.bigos.awp.domain.*;
 import com.bigos.awp.exception.EntityNotFoundException;
 import com.bigos.awp.service.TaskService;
 import com.bigos.awp.utilities.SortUtility;
@@ -29,6 +29,7 @@ public class TaskController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     Task read(@RequestParam(value = "taskId") long taskId) {
@@ -39,6 +40,7 @@ public class TaskController {
         return comment;
     }
 
+    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(params = { "page", "size" }, method = RequestMethod.GET)
     @ResponseBody
     public List<Task> findPaginated(@RequestParam("page") final int page, @RequestParam("size") final int size) {
@@ -49,7 +51,8 @@ public class TaskController {
         return resultPage.getContent();
     }
 
-    @RequestMapping(value = "/all/{attribute}")
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(value = "/{attribute}")
     @ResponseBody
     public List<Task> getAll(@PathVariable("attribute") String attribute, @RequestParam("direction") String direction) {
         List<Task> all = taskService.findAll(SortUtility.orderBy(direction, attribute));
@@ -59,10 +62,12 @@ public class TaskController {
         return all;
     }
 
-    @RequestMapping("/{user}")
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping("/custom/{attribute}")
     @ResponseBody
-    public List<Task> getAllTaskByEditor(@PathVariable String user, @RequestParam("userId") long userId) {
-        switch (user) {
+    public List<Task> getAllTaskByEditor(@PathVariable String attribute, @RequestParam(value = "userId",
+            required = false) long userId, @RequestParam(value = "status", required = false)TaskStatus status) {
+        switch (attribute) {
             case "editor" :
                 return taskService.getAllByEditor(userId);
             case "prft" :
@@ -71,28 +76,38 @@ public class TaskController {
                 return taskService.getAllByProgrammer(userId);
             case "tester" :
                 return taskService.getAllByTester(userId);
+            case "status" :
+                return taskService.getAllByStatus(status);
         }
         return Collections.emptyList();
     }
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< deletes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @RequestMapping(value = "/delete/{taskId}", method = RequestMethod.DELETE)
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(value = "/{taskId}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "taskId") long taskId) {
         taskService.delete(taskId);
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void delete(@RequestBody Task task) {
-        taskService.delete(task);
     }
 
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< updates >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @RequestMapping( value = "/add", method = RequestMethod.PUT)
-    public @ResponseBody Task addUser(@RequestBody Task task) {
-        task.setCreateDate(new Date());
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(method = RequestMethod.PUT)
+    public @ResponseBody Task putTask(@RequestBody Task task) {
+        if (task.getCreateDate() == null) {
+            task.setCreateDate(new Date());
+        }
         return taskService.save(task);
     }
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<change status>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    @CrossOrigin(origins = "http://localhost:9292")
+    @RequestMapping(value = "{updown}", method = RequestMethod.POST)
+    public void changeStatus(@PathVariable ChangeStatus updown, @RequestParam("taskId") long taskId, @RequestParam("userId") long userId) {
+        taskService.changeStatus(taskId, userId, updown);
+    }
+
 }

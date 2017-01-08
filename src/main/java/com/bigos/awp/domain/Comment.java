@@ -31,6 +31,11 @@ public class Comment {
     @NotNull
     private String commentBody;
 
+    @ManyToOne
+    @JoinColumn(name = "taskId")
+    @JsonBackReference
+    private Task task;
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -79,5 +84,13 @@ public class Comment {
 
     public void setCommentBody(String commentBody) {
         this.commentBody = commentBody;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

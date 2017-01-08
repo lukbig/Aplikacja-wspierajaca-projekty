@@ -1,6 +1,7 @@
 package com.bigos.awp.domain.repository;
 
 import com.bigos.awp.domain.Task;
+import com.bigos.awp.domain.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,6 +12,8 @@ import java.util.List;
  */
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
+
+    List<Task> getAllByStatus(TaskStatus status);
 
     @Query("select t from Task t where t.editor.id = ?1")
     List<Task> getAllByEditor(long userId);

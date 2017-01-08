@@ -22,7 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
-    @NotNull
+    @NotNull(message = "Nickname cannot be null")
     private String nickName;
 
     @Size(min = 2, max = 30)

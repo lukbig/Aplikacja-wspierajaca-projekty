@@ -1,6 +1,9 @@
 package com.bigos.awp.service;
 
+import com.bigos.awp.domain.ChangeStatus;
+import com.bigos.awp.domain.Comment;
 import com.bigos.awp.domain.Task;
+import com.bigos.awp.domain.TaskStatus;
 
 import java.util.List;
 
@@ -16,4 +19,8 @@ public interface TaskService extends TemplateService<Task> {
     List<Task> getAllByProgrammer(long userId);
 
     List<Task> getAllByTester(long userId);
+
+    List<Task> getAllByStatus(TaskStatus status);
+
+    void changeStatus(long taskId, long userId, ChangeStatus updown);
 }
