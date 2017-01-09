@@ -23,14 +23,15 @@
 
     <security:http auto-config="true" use-expressions="true">
         <!--If we use hasAnyAuthority, we can remove ROLE_ prefix-->
-        <!--<security:intercept-url pattern="/rest/**" access="hasAnyAuthority('MANAGER','ADMIN', 'USER')"/>-->
+        <security:intercept-url pattern="/rest/**" access="hasAnyAuthority('MANAGER','ADMIN', 'USER')"/>
         <security:intercept-url pattern="/admin/**" access="hasAnyAuthority('ADMIN')"/>
         <security:intercept-url pattern="/manager/**" access="hasAnyAuthority('MANAGER')"/>
         <security:intercept-url pattern="/user/**" access="hasAnyAuthority('USER')"/>
-        <security:logout logout-url="/logout"
-                invalidate-session="true"
-                logout-success-url="/index?logout"
-        />
+        <security:form-login login-page="/awplogin"/>
+        <!--<security:logout logout-url="/login"-->
+                <!--invalidate-session="true"-->
+                <!--logout-success-url="/login?logout=1"-->
+        <!--/>-->
         <!-- enable csrf protection -->
         <security:csrf disabled="true"/>
     </security:http>

@@ -29,7 +29,6 @@ public class TaskController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     Task read(@RequestParam(value = "taskId") long taskId) {
@@ -40,7 +39,6 @@ public class TaskController {
         return comment;
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(params = { "page", "size" }, method = RequestMethod.GET)
     @ResponseBody
     public List<Task> findPaginated(@RequestParam("page") final int page, @RequestParam("size") final int size) {
@@ -51,7 +49,6 @@ public class TaskController {
         return resultPage.getContent();
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/{attribute}")
     @ResponseBody
     public List<Task> getAll(@PathVariable("attribute") String attribute, @RequestParam("direction") String direction) {
@@ -62,7 +59,6 @@ public class TaskController {
         return all;
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping("/custom/{attribute}")
     @ResponseBody
     public List<Task> getAllTaskByEditor(@PathVariable String attribute, @RequestParam(value = "userId",
@@ -84,7 +80,6 @@ public class TaskController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< deletes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/{taskId}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "taskId") long taskId) {
         taskService.delete(taskId);
@@ -93,7 +88,6 @@ public class TaskController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< updates >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody Task putTask(@RequestBody Task task) {
         if (task.getCreateDate() == null) {
@@ -104,7 +98,6 @@ public class TaskController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<change status>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "{updown}", method = RequestMethod.POST)
     public void changeStatus(@PathVariable ChangeStatus updown, @RequestParam("taskId") long taskId, @RequestParam("userId") long userId) {
         taskService.changeStatus(taskId, userId, updown);

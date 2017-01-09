@@ -1,0 +1,44 @@
+<nav class="navbar navbar-transparent">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      <!-- drop down -->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle white" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="customFontSize">Tasks <span class="caret white"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" ng-click='clickMyTaskView()'>My Tasks</a></li>
+            <li><a href="#" ng-click='clickAvancedTaskSearch()'>Advanced Search</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle white" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="customFontSize" >Users <span class="caret white"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" ng-click='clickAvancedUserSearch()'>Advanced Search</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- typeahead -->
+      <form class="navbar-form navbar-left" ng-submit='searchMyTask()'>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="enter task id" ng-model="searchMyTaskQuery"
+          uib-typeahead="task.taskId for task in myEditorTasks | filter:$viewValue | limitTo:8"
+          typeahead-on-select='selectMyTask($item)'
+          >
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <!-- right dropdown -->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret" style="color:white"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Preferences</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#" ng-click='logout()'>Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

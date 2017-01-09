@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app='awp'>
 <head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
+	<base href="/">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatibile" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Application for project managment</title>
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-dialog.min.css" rel="stylesheet">
+	<link href="css/background.css" rel="stylesheet">
 </head>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <body>
-    <h1>Witam Pana prezesa!</h1>
+	<!-- $routeProvider: Your application needs a container to put the content provided by the routing. -->
+	<div class='container'>
+		<div ng-view></div>
+	</div>
+	
+	<!-- external -->
+	<script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/angular.min.js"></script>
+	<script type="text/javascript" src="/js/angular-resource.min.js"></script>
+	<script type="text/javascript" src="/js/angular-route.min.js"></script>
+	<script type="text/javascript" src="/js/external/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script type="text/javascript" src="/js/external/bootstrap-dialog.min.js"></script>
+	<script type="text/javascript" src="/js/external/dirPagination.js"></script>
+
+	<!-- internal -->
+	<script src="/js/app/app.module.js"></script>
+	<script src="/js/app/app.config.js"></script>
+
+	<script src="/js/app/utils/basic-nav.module.js"></script>
+	<script src="/js/app/utils/basic-nav.directive.js"></script>
+	<script src="/js/app/utils/admin-nav.module.js"></script>
+	<script src="/js/app/utils/admin-nav.directive.js"></script>
+	<script src="/js/app/utils/manager-nav.module.js"></script>
+	<script src="/js/app/utils/manager-nav.directive.js"></script>
+	<script src="/js/app/utils/user-nav.module.js"></script>
+	<script src="/js/app/utils/user-nav.directive.js"></script>
+
+	<script src="/js/app/utils/login-controller.js"></script>
+
+	<script src="/js/app/admin-panel/admin-panel.module.js"></script>
+	<script src="/js/app/admin-panel/admin-panel.component.js"></script>
+	<script src="/js/app/manager-panel/manager-panel.module.js"></script>
+	<script src="/js/app/manager-panel/manager-panel.component.js"></script>
+	<script src="/js/app/user-panel/user-panel.module.js"></script>
+	<script src="/js/app/user-panel/user-panel.component.js"></script>
 </body>
+
 </html>

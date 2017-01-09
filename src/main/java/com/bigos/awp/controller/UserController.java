@@ -31,7 +31,6 @@ public class UserController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody User read(@RequestParam(value = "userId") long userId) {
         User user = userService.findOne(userId);
@@ -41,13 +40,11 @@ public class UserController {
         return user;
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public @ResponseBody User readUserByNickName(@RequestParam(value = "nickName") String nickName) {
         return userService.getUserByNickName(nickName);
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/custom", method = RequestMethod.GET)
     public @ResponseBody List<User> advancedSearch(@RequestParam(value = "nickName", required = false) String nickName,
         @RequestParam(value = "firstName", required = false) String firstName, @RequestParam(value = "secondName", required = false) String secondName,
@@ -58,7 +55,6 @@ public class UserController {
 
     @RequestMapping(params = { "page", "size" }, method = RequestMethod.GET)
     @ResponseBody
-    @CrossOrigin(origins = "http://localhost:9292")
     public List<User> findPaginated(@RequestParam("page") final int page, @RequestParam("size") final int size) {
         final Page<User> resultPage = userService.findAll(page, size);
         if (page > resultPage.getTotalPages()) {
@@ -69,7 +65,6 @@ public class UserController {
 
     @RequestMapping(value = "/{attribute}")
     @ResponseBody
-    @CrossOrigin(origins = "http://localhost:9292")
     public List<User> getAll(@PathVariable("attribute") String attribute, @RequestParam("direction") String direction) {
         List<User> all = userService.findAll(SortUtility.orderBy(direction, attribute));
         if (!(all.size() > 0)) {
@@ -82,7 +77,6 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    @CrossOrigin(origins = "http://localhost:9292")
     public void delete(@PathVariable(value = "userId")  long userId) {
         userService.delete(userId);
     }
@@ -92,14 +86,12 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    @CrossOrigin(origins = "http://localhost:9292")
     public void addUser(@RequestBody @Valid User user) {
         userService.save(user);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    @CrossOrigin(origins = "http://localhost:9292")
     public void updateUser(@RequestBody User user) {
         userService.update(user);
     }

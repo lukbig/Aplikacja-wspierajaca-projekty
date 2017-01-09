@@ -1,0 +1,343 @@
+<user-nav></user-nav>
+
+<!-- COMMENTS MODE -->
+<div class="container" ng-show='commentMode'>
+	<div class="row" dir-paginate = 'comment in selectedTask.comments | itemsPerPage: 5'>
+		<div class="col-xs-offset-2 col-xs-8">
+			<label>{{comment.creator.nickName}} {{convertDate(comment.createDate)}} {{comment.commentType}}</label>
+		</div>
+		<div class="col-xs-offset-2 col-xs-8">
+	    		<textarea readonly class="form-control" id="inputTextArea" rows="3">{{comment.commentBody}}</textarea>
+		</div>
+	</div>
+
+	<div class = "row col-xs-offset-2 col-xs-8">
+		<dir-pagination-controls></dir-pagination-controls>
+	</div>
+
+	<!-- ADD COMMENT -->
+	<div class = "row top-buffer col-xs-offset-2 col-xs-8">
+		<div class="btn-group btn-group-lg pull-left" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'saveComment(newComment, selectedTask)'>Add comment</button>
+		</div>
+	</div>
+
+	<div class = "row top-buffer col-xs-offset-2 col-xs-3">
+		<select class="form-control" ng-model='newComment.commentType'>
+		  	<option>REGULAR</option>
+	      	<option>TASK_DESCRIPTION</option>
+	      	<option>AFTER_DEVELOPMENT</option>
+	      	<option>AFTER_TESTS</option>
+		</select>
+	</div>
+
+	<div class = "row col-xs-offset-2 col-xs-8">
+	    <textarea class="form-control" rows="3" ng-model = 'newComment.commentBody'/>
+	</div>
+
+	<div class="row top-buffer col-xs-offset-2 col-xs-8">
+		<div class="btn-group btn-group-lg pull-right" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'backFromTaskCommentView()'>Back</button>
+			<button type="button" class="btn btn-default" ng-click='refreshData()' >Cancel</button>
+		</div>
+	</div>
+</div>
+
+<!-- TASK view -->
+<div class="container" ng-show = 'selectedTask != null && viewTaskMode'>
+		<div class="container">
+		<div class="row
+			col-lg-offset-2 col-md-offset-1">
+			<button type="button" class="btn btn-success" ng-show='enableTaskActions(selectedTask)' ng-click='changeTaskStatusForward(selectedTask)'>
+			Change Task Status Forward</button>
+			<button type="button" class="btn btn-success" ng-show='enableTaskActions(selectedTask)' ng-click='changeTaskStatusBackward(selectedTask)'>
+			Change Task Status Backward</button>
+			<button type="button" class="btn btn-success" ng-click='clickAddCommentFromVt(selectedTask)'>View Comments</button>
+		</div>
+		<div class="row top-buffer"></div>
+		</div>
+		<div class="row
+			col-lg-offset-2 col-lg-8 col-lg-offset-2
+			col-md-offset-1 col-md-10 col-md-offset-1
+			col-sm-12">
+		<div class="table-responsive">
+		<table class="table">
+			<tbody>
+				<tr><td>Task id</td><td>{{selectedTask.taskId}}</td></tr>
+				<tr><td>Task status</td><td>{{selectedTask.status}}</td></tr>
+				<tr><td>Editor</td><td>{{selectedTask.editor.nickName}}</td></tr>
+				<tr><td>Person Responsible for task</td><td>{{selectedTask.personResponsibleForTask.nickName}}</td></tr>
+				<tr><td>Programmer</td><td>{{selectedTask.programmer.nickName}}</td></tr>
+				<tr><td>Tester</td><td>{{selectedTask.tester.nickName}}</td></tr>
+				<tr><td>Priority</td><td>{{selectedTask.priority}}</td></tr>
+				<tr><td>Create Date</td><td>{{convertDate(selectedTask.createDate)}}</td></tr>
+				<tr><td>Description</td><td>{{selectedTask.description}}</td></tr>
+			</tbody>
+		</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='refreshData()'>Ok</button>
+				<button type="button" class="btn btn-success" ng-show = 'beforeMode > 0' ng-click = 'backFromTaskCommentView()'>Back</button>
+			</div>
+	</div>
+</div>
+
+<!-- Advanced search Task form -->
+<div class="container" ng-show = 'searchTaskMode'>
+	<form>
+		<div class="form-group row">
+	    	<label class="col-xs-3 col-form-label">Editor</label>
+	    	<div class="col-xs-3">
+	          	<input type="text" class="form-control" placeholder="enter username" ng-model="searchTaskEditor"
+	          	uib-typeahead="user.nickName for user in sortedTaskUsers | filter:$viewValue | limitTo:8"
+	          	typeahead-on-select='selectTaskEditor(searchTask, $item)'
+	          	/>
+          	</div>
+	    	<label class="col-xs-3 col-form-label">Person Responsible for task</label>
+	    	<div class="col-xs-3">
+	          	<input type="text" class="form-control" placeholder="enter username" ng-model="searchTaskPRFT"
+	          	uib-typeahead="user.nickName for user in sortedTaskUsers | filter:$viewValue | limitTo:8"
+	          	typeahead-on-select='selectTaskPRFT(searchTask, $item)'
+	          	/>
+          	</div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-3 col-form-label">Programmer</label>
+	    	<div class="col-xs-3">
+	          	<input type="text" class="form-control" placeholder="enter username" ng-model="searchTaskProgrammer"
+	          	uib-typeahead="user.nickName for user in sortedTaskUsers | filter:$viewValue | limitTo:8"
+	          	typeahead-on-select='selectTaskProgrammer(searchTask, $item)'
+	          	/>
+          	</div>
+		    <label class="col-xs-3 col-form-label">Tester</label>
+		    <div class="col-xs-3">
+	          	<input type="text" class="form-control" placeholder="enter username" ng-model="searchTaskTester"
+	          	uib-typeahead="user.nickName for user in sortedTaskUsers | filter:$viewValue | limitTo:8"
+	          	typeahead-on-select='selectTaskTester(searchTask, $item)'
+	          	/>
+          	</div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-3 col-form-label">Status</label>
+	    	<div class="col-xs-3">
+		   		<select class="form-control" ng-model='searchTask.status'>
+		   			<option></option>
+				  	<option>CREATED</option>
+			      	<option>IN_PROCESS</option>
+			      	<option>PRODUCT_MANAGER</option>
+			      	<option>CONSULTATION_REQUIRED</option>
+			      	<option>TESTS</option>
+			      	<option>FINISHED</option>
+			      	<option>COMPLETED</option>
+				</select>
+			</div>
+	  	</div>
+
+	  	<div class="btn-group btn-group-lg pull-right" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'submitAdvancedTaskSearch(searchTask)'>Search</button>
+			<button type="button" class="btn btn-default" ng-click = 'refreshData()'>Cancel</button>
+		</div>
+	</form>
+</div>
+
+<!-- FOUND TASKS TABLE -->
+<div class="container" ng-show = 'tasksFound != null && searchTaskMode'>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<th>Task id</th>
+					<th>Status</th>
+					<th>Editor</th>
+					<th>Person Responsible for task</th>
+					<th>Programmer</th>
+					<th>Tester</th>
+					<th>Create date</th>
+					<th>Actions</th>
+				</thead>
+				<tbody>
+				<!-- ng-repeat='user in usersFound' -->
+					<tr dir-paginate = 'task in tasksFound | itemsPerPage: 10'>
+						<td>{{task.taskId}}</td>
+						<td>{{task.status}}</td>
+						<td>{{task.editor.nickName}}</td>
+						<td>{{task.personResponsibleForTask.nickName}}</td>
+						<td>{{task.programmer.nickName}}</td>
+						<td>{{task.tester.nickName}}</td>
+						<td>{{convertDate(task.createDate)}}</td>
+						<td>
+							<a href="#" ng-click="clickViewTaskFromAS(task)">
+                            	<span class="glyphicon glyphicon-ok white"/>
+                        	</a>
+                        	<a href="#" ng-show='enableTaskActions(task)' ng-click="changeTaskStatusBackward(task)">
+                            	<span class="glyphicon glyphicon glyphicon-step-backward white"/>
+                        	</a>
+                        	<a href="#" ng-show='enableTaskActions(task)' ng-click="changeTaskStatusForward(task)">
+                            	<span class="glyphicon glyphicon glyphicon-step-forward white"/>
+                        	</a>
+                        	<a href="#" ng-click="clickAddCommentFromAs(task)">
+                            	<span class="glyphicon glyphicon-comment white"/>
+                        	</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='clearTasksFound()'>Ok</button>
+			</div>
+			<dir-pagination-controls></dir-pagination-controls>
+	</div>
+</div>
+
+<!-- USERS -->
+<!-- SEARCH USERS FORM -->
+
+<div class="container" ng-show = 'searchUserMode'>
+	<form>
+		<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputNickname">Nickname</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputNickname" ng-model='searchUser.nickName'/>
+	    	</div>
+	    	<label class="col-xs-2 col-form-label" for="inputFistName">Fist Name</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputFistName"  ng-model='searchUser.firstName'/>
+	    	</div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputSecondName">Second Name</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputSecondName" ng-model='searchUser.secondName'/>
+	    	</div>
+		    <label for="exampleInputEmail1" class="col-xs-2 col-form-label">Email address</label>
+		    <div class="col-xs-4">
+		    	<input type="email" class="form-control" id="exampleInputEmail1" ng-model='searchUser.email' aria-describedby="emailHelp"/>
+		    </div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label">Position</label>
+	    	<div class="col-xs-4">
+		   		<select class="form-control" ng-model='searchUser.position'>
+		   			<option></option>
+				  	<option>PROGRAMMER</option>
+			      	<option>TESTER</option>
+			      	<option>PRODUCT_MANAGER</option>
+			      	<option>ADMINISTRATOR</option>
+			      	<option>CONSULTANT</option>
+			      	<option>ARCHITECT</option>
+				</select>
+			</div>
+	    	<label class="col-xs-2 col-form-label">Permission</label>
+	    	<div class="col-xs-4">
+		    	<select class="form-control" ng-model='searchUser.permissions'>
+		    		<option></option>
+		    		<option>USER</option>
+	 	 			<option>MANAGER</option>
+			      	<option>ADMIN</option>
+			    </select>
+			</div>
+	  	</div>
+
+	  	<div class="btn-group btn-group-lg pull-right" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'submitAdvancedUserSearch(searchUser)'>Search</button>
+			<button type="button" class="btn btn-default" ng-click='refreshData()' >Cancel</button>
+		</div>
+	</form>
+</div>
+
+<!-- FOUND USERS TABLE -->
+<div class="container" ng-show = 'usersFound != null && searchUserMode'>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<th>UserId</th>
+					<th>Nickname</th>
+					<th>First name</th>
+					<th>Second name</th>
+					<th>Email</th>
+					<th>Position</th>
+					<th>Permissions</th>
+				</thead>
+				<tbody>
+				<!-- ng-repeat='user in usersFound' -->
+					<tr dir-paginate = 'user in usersFound | itemsPerPage: 10'>
+						<td>{{user.userId}}</td>
+						<td>{{user.nickName}}</td>
+						<td>{{user.firstName}}</td>
+						<td>{{user.secondName}}</td>
+						<td>{{user.email}}</td>
+						<td>{{user.position}}</td>
+						<td>{{user.permissions}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='closeTableWithFoundUsers()'>Ok</button>
+			</div>
+			<dir-pagination-controls></dir-pagination-controls>
+	</div>
+</div>
+
+<!-- MY TASK VIEW -->
+<div class="container" ng-show = 'customUserTasks != null && myTaskViewMode'>
+	<div class="container">
+		<div class="row">
+			<button type="button" class="btn btn-success" ng-click='clickMyTaskView()'>Editor</button>
+			<button type="button" class="btn btn-success" ng-click='clickPRFT()'>Person responsible for task</button>
+			<button type="button" class="btn btn-success" ng-click='clickProgrammer()'>Programmer</button>
+			<button type="button" class="btn btn-success" ng-click='clickTester()'>Tester</button>
+		</div>
+		<div class="row top-buffer"></div>
+	</div>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<th>Status</th>
+					<th>Editor</th>
+					<th>Person Responsible for task</th>
+					<th>Programmer</th>
+					<th>Tester</th>
+					<th>Create date</th>
+					<th>Actions</th>
+				</thead>
+				<tbody>
+				<!-- ng-repeat='user in usersFound' -->
+					<tr dir-paginate = 'task in customUserTasks | itemsPerPage: 10'>
+						<td>{{task.status}}</td>
+						<td>{{task.editor.nickName}}</td>
+						<td>{{task.personResponsibleForTask.nickName}}</td>
+						<td>{{task.programmer.nickName}}</td>
+						<td>{{task.tester.nickName}}</td>
+						<td>{{convertDate(task.createDate)}}</td>
+						<td>
+							<a href="#" ng-click="clickViewTaskFromMTV(task)">
+                            	<span class="glyphicon glyphicon-ok white"/>
+                        	</a>
+                        	<a href="#" ng-show='enableTaskActions(task)' ng-click="changeTaskStatusBackward(task)">
+                            	<span class="glyphicon glyphicon glyphicon-step-backward white"/>
+                        	</a>
+                        	<a href="#" ng-show='enableTaskActions(task)' ng-click="changeTaskStatusForward(task)">
+                            	<span class="glyphicon glyphicon glyphicon-step-forward white"/>
+                        	</a>
+                        	<a href="#" ng-click="clickAddCommentFromMTV(task)">
+                            	<span class="glyphicon glyphicon-comment white"/>
+                        	</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='refreshData()'>Ok</button>
+			</div>
+			<dir-pagination-controls></dir-pagination-controls>
+	</div>
+</div>

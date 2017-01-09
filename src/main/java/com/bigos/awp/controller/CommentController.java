@@ -29,7 +29,6 @@ public class CommentController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     Comment read(@RequestParam(value = "commentId") long commentId) {
@@ -40,7 +39,6 @@ public class CommentController {
         return comment;
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(params = { "page", "size" }, method = RequestMethod.GET)
     @ResponseBody
     public List<Comment> findPaginated(@RequestParam("page") final int page, @RequestParam("size") final int size) {
@@ -51,7 +49,6 @@ public class CommentController {
         return resultPage.getContent();
     }
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/{attribute}")
     @ResponseBody
     public List<Comment> getAll(@PathVariable("attribute") String attribute, @RequestParam("direction") String direction) {
@@ -64,7 +61,6 @@ public class CommentController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< deletes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "commentId") long commentId) {
         commentService.delete(commentId);
@@ -73,7 +69,6 @@ public class CommentController {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< updates >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    @CrossOrigin(origins = "http://localhost:9292")
     @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody Comment addComment(@RequestBody Comment comment) {
         comment.setCreateDate(new Date());

@@ -1,0 +1,209 @@
+<admin-nav></admin-nav>
+<!-- USER VIEW -->
+<div class="container" ng-show = 'selectedUser != null && editMode == false && createMode == false'>
+	<div class="row
+			col-lg-offset-2 col-lg-8 col-lg-offset-2
+			col-md-offset-1 col-md-10 col-md-offset-1
+			col-sm-12">
+		<div class="table-responsive">
+		<table class="table">
+			<tbody>
+				<tr><td>UserId</td><td>{{selectedUser.userId}}</td></tr>
+				<tr><td>Nickname</td><td>{{selectedUser.nickName}}</td></tr>
+				<tr><td>First name</td><td>{{selectedUser.firstName}}</td></tr>
+				<tr><td>Second name</td><td>{{selectedUser.secondName}}</td></tr>
+				<tr><td>Email</td><td>{{selectedUser.email}}</td></tr>
+				<tr><td>Position</td><td>{{selectedUser.position}}</td></tr>
+				<tr><td>Permissions</td><td>{{selectedUser.permissions}}</td></tr>
+			</tbody>
+		</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='clearSelectedUser()'>Ok</button>
+				<button type="button" class="btn btn-warning" ng-click='setEditMode(selectedUser)'>Edit</button>
+				<button type="button" class="btn btn-danger" ng-click='clickDelete(selectedUser)'>Delete</button>
+			</div>
+	</div>
+</div>
+
+<!-- EDIT/ADD FORM -->
+
+<div class="container" ng-show = 'selectedUser != null && (editMode || createMode)'>
+	<form>
+		<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputNickname">Nickname</label>
+	    	<div class="col-xs-10">
+	    		<input type="text" class="form-control" id="inputNickname" ng-model='selectedUser.nickName'/>
+	    	</div>
+	  	</div>
+	  	<div class="form-group row" ng-show='createMode'>
+	    	<label class="col-xs-2 col-form-label" for="exampleInputPassword1">Password</label>
+	    	<div class="col-xs-10">
+		    	<input type="password" class="form-control" id="exampleInputPassword1" ng-model='selectedUser.password'/>
+		    </div>
+	  	</div>
+	  	<div class="form-group row" ng-show='editMode'>
+	    	<label class="col-xs-2 col-form-label" for="exampleInputPassword2">New password</label>
+	    	<div class="col-xs-10">
+		    	<input type="password" class="form-control" id="exampleInputPassword2" ng-model='newpassword'/>
+		    </div>
+	  	</div>
+	  	<div class="form-group row" ng-show='editMode'>
+	    	<label class="col-xs-2 col-form-label" for="exampleInputPassword3">Repeat new password</label>
+	    	<div class="col-xs-10">
+		    	<input type="password" class="form-control" id="exampleInputPassword3" ng-model='repeatnewpassword'/>
+		    </div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputFistName">Fist Name</label>
+	    	<div class="col-xs-10">
+	    		<input type="text" class="form-control" id="inputFistName"  ng-model='selectedUser.firstName'/>
+	    	</div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputSecondName">Second Name</label>
+	    	<div class="col-xs-10">
+	    		<input type="text" class="form-control" id="inputSecondName" ng-model='selectedUser.secondName'/>
+	    	</div>
+	  	</div>
+	  	<div class="form-group row">
+		    <label for="exampleInputEmail1" class="col-xs-2 col-form-label">Email address</label>
+		    <div class="col-xs-10">
+		    	<input type="email" class="form-control" id="exampleInputEmail1" ng-model='selectedUser.email' aria-describedby="emailHelp"/>
+		    </div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label">Position</label>
+	    	<div class="col-xs-10">
+		   		<select class="form-control" ng-model='selectedUser.position'>
+				  	<option>PROGRAMMER</option>
+			      	<option>TESTER</option>
+			      	<option>PRODUCT_MANAGER</option>
+			      	<option>ADMINISTRATOR</option>
+			      	<option>CONSULTANT</option>
+			      	<option>ARCHITECT</option>
+				</select>
+			</div>
+	  	</div>
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label">Permission</label>
+	    	<div class="col-xs-10">
+		    	<select class="form-control" ng-model='selectedUser.permissions'>
+		    		<option>USER</option>
+	 	 			<option>MANAGER</option>
+			      	<option>ADMIN</option>
+			    </select>
+			</div>
+	  	</div>
+
+	  	<div class="btn-group btn-group-lg pull-right" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'submitAddUser()'>Submit</button>
+			<button type="button" class="btn btn-default" ng-click='clearSelectedUser()' >Cancel</button>
+			<button type="button" class="btn btn-danger" ng-click='clickDelete(selectedUser)'>Delete</button>
+		</div>
+	</form>
+</div>
+
+<!-- SEARCH FORM -->
+
+<div class="container" ng-show = 'searchMode'>
+	<form>
+		<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputNickname">Nickname</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputNickname" ng-model='searchUser.nickName'/>
+	    	</div>
+	    	<label class="col-xs-2 col-form-label" for="inputFistName">Fist Name</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputFistName"  ng-model='searchUser.firstName'/>
+	    	</div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label" for="inputSecondName">Second Name</label>
+	    	<div class="col-xs-4">
+	    		<input type="text" class="form-control" id="inputSecondName" ng-model='searchUser.secondName'/>
+	    	</div>
+		    <label for="exampleInputEmail1" class="col-xs-2 col-form-label">Email address</label>
+		    <div class="col-xs-4">
+		    	<input type="email" class="form-control" id="exampleInputEmail1" ng-model='searchUser.email' aria-describedby="emailHelp"/>
+		    </div>
+	  	</div>
+
+	  	<div class="form-group row">
+	    	<label class="col-xs-2 col-form-label">Position</label>
+	    	<div class="col-xs-4">
+		   		<select class="form-control" ng-model='searchUser.position'>
+		   			<option></option>
+				  	<option>PROGRAMMER</option>
+			      	<option>TESTER</option>
+			      	<option>PRODUCT_MANAGER</option>
+			      	<option>ADMINISTRATOR</option>
+			      	<option>CONSULTANT</option>
+			      	<option>ARCHITECT</option>
+				</select>
+			</div>
+	    	<label class="col-xs-2 col-form-label">Permission</label>
+	    	<div class="col-xs-4">
+		    	<select class="form-control" ng-model='searchUser.permissions'>
+		    		<option></option>
+		    		<option>USER</option>
+	 	 			<option>MANAGER</option>
+			      	<option>ADMIN</option>
+			    </select>
+			</div>
+	  	</div>
+
+	  	<div class="btn-group btn-group-lg pull-right" role="group">
+			<button type="button" class="btn btn-success" ng-click = 'submitAdvancedSearch()'>Search</button>
+			<button type="button" class="btn btn-default" ng-click='cancelAdvancedSearch()' >Cancel</button>
+		</div>
+	</form>
+</div>
+
+<!-- FOUND USERS TABLE -->
+<div class="container" ng-show = 'usersFound != null && searchMode'>
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<th>UserId</th>
+					<th>Nickname</th>
+					<th>First name</th>
+					<th>Second name</th>
+					<th>Email</th>
+					<th>Position</th>
+					<th>Permissions</th>
+					<th>Actions</th>
+				</thead>
+				<tbody>
+				<!-- ng-repeat='user in usersFound' -->
+					<tr dir-paginate = 'user in usersFound | itemsPerPage: 10'>
+						<td>{{user.userId}}</td>
+						<td>{{user.nickName}}</td>
+						<td>{{user.firstName}}</td>
+						<td>{{user.secondName}}</td>
+						<td>{{user.email}}</td>
+						<td>{{user.position}}</td>
+						<td>{{user.permissions}}</td>
+						<td>
+							<a href="#" ng-click="clickSearchViewOk(user)">
+                            	<span class="glyphicon glyphicon-ok white"/>
+                        	</a>
+							<a href="#" ng-click="setEditMode(user)">
+                            	<span class="glyphicon glyphicon-edit white"/>
+                        	</a>
+							<a href="#" ng-click="clickDelete(user)">
+                            	<span class="glyphicon glyphicon-remove white"/>
+                        	</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+			<div class="btn-group btn-group-lg pull-right" role="group">
+				<button type="button" class="btn btn-default" ng-click='closeTableWithFoundUsers()'>Ok</button>
+			</div>
+			<dir-pagination-controls></dir-pagination-controls>
+	</div>
+</div>

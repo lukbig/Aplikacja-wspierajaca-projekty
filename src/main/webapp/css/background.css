@@ -1,0 +1,16 @@
+body {
+    background-image: url(/img/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #FFFFFF;
+}
+
+#customFontSize {
+	font-size: 30px;
+}
+/*color of icons*/
+.white {
+    color: white;
+}
+
+.top-buffer { margin-top:20px; }

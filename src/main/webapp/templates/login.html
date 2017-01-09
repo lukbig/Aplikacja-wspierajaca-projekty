@@ -1,0 +1,31 @@
+<basic-nav></basic-nav>
+<div class="container" ng-controller='loginController'>
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Please sign in</h3>
+			</div>
+			<div class="panel-body">
+				<div ng-if='param.error' class="alert alert-danger">
+					Invalid username or passord
+				</div>
+				<div ng-if='param.logout' class="alert alert-success"> 
+	                    You have been logged out.
+				</div>
+				<form name="loginForm" action="/login" method="post">
+					<fieldset>
+						<div class="form-group">
+			                <input class="form-control" placeholder="username" type="text" id="username" ng-model="username" required="true" />
+			                <span ng-show="loginForm.username.$error.required">Username is required</span>
+			            </div>
+			            <div class="form-group">
+			                <input class="form-control" placeholder="password" type="password" id="password" ng-model="password" required="true"/>
+			                <span ng-show="loginForm.password.$error.required">Password is required</span>
+			            </div>
+						<input class="btn btn-lg btn-success btn-block" value="Login" ng-click='clickSubmitLogin()' />
+		            </fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
